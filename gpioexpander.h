@@ -33,6 +33,9 @@ extern "C" {
 
 #include "gpioexpandertypes.h"
 
+/*!
+ *
+ */
 GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev);
 
 /*!
@@ -40,10 +43,19 @@ GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev);
  */
 GPIOExpander_Errors_t GPIOExpander_config (GPIOExpander_DeviceHandle_t, GPIOExpander_Pins_t pin);
 
+/*!
+ *
+ */
 GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t, GPIOExpander_Pins_t pin);
 
+/*!
+ *
+ */
 GPIOExpander_Errors_t GPIOExpander_clear (GPIOExpander_DeviceHandle_t, GPIOExpander_Pins_t pin);
 
+/*!
+ *
+ */
 GPIOExpander_Errors_t GPIOExpander_get (GPIOExpander_DeviceHandle_t, GPIOExpander_Pins_t pin, Gpio_Level* level);
 
 #ifdef __cplusplus

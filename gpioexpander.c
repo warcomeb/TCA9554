@@ -27,10 +27,58 @@
 #include "gpioexpander.h"
 #include "TCA9554.h"
 
+static inline uint8_t __attribute__((always_inline)) getAddress (GPIOExpander_Pins_t pin)
+{
+    if (pin == 0xFFFFFFFF)
+    {
+        ohiassert(0);
+        return 0;
+    }
+
+    switch ((pin & GPIOEXPANDER_PINS_DEVICE_MASK) >> 16)
+    {
+    case TCA9554_ADDRESS_0x20:
+        return 0x20;
+    case TCA9554_ADDRESS_0x21:
+        return 0x21;
+    case TCA9554_ADDRESS_0x22:
+        return 0x22;
+    case TCA9554_ADDRESS_0x23:
+        return 0x23;
+    case TCA9554_ADDRESS_0x24:
+        return 0x24;
+    case TCA9554_ADDRESS_0x25:
+        return 0x25;
+    case TCA9554_ADDRESS_0x26:
+        return 0x26;
+    case TCA9554_ADDRESS_0x27:
+        return 0x27;
+    default:
+        ohiassert(0);
+        return 0;
+    }
+}
+
 GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev)
 {
     GPIOExpander_Device_t device = {0};
     device.device = (Iic_DeviceHandle)dev;
 
     return device;
+}
+
+GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin)
+{
+    if (dev == null)
+    {
+        ohiassert(0);
+    }
+
+    uint8_t address = getAddress(pin);
+    if (address != 0)
+    {
+        // Write register...
+        return GPIOEXPANDER_ERRORS_NO_ERROR;
+    }
+    return GPIOEXPANDER_ERRORS_WRONG_DEVICE;
 }
