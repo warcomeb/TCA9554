@@ -45,6 +45,7 @@ typedef enum _GPIOExpander_Errors_t
 {
     GPIOEXPANDER_ERRORS_NO_ERROR = 0,
     GPIOEXPANDER_ERRORS_WRONG_DEVICE,
+    GPIOEXPANDER_ERRORS_WRONG_PARAMS,
 } GPIOExpander_Errors_t;
 
 
@@ -63,7 +64,8 @@ typedef enum _GPIOExpander_Pins_t
     GPIOEXPANDER_PINS_NONE = 0xFFFFFFFF,
 } GPIOExpander_Pins_t;
 
-#define GPIOEXPANDER_PINS_DEVICE_MASK            0x00FF0000
+#define GPIOEXPANDER_DEVICE_MASK                 0x00FF0000
+#define GPIOEXPANDER_PINS_MASK                   0x000000FF
 
 /*!
  * GPIO Expander device class.

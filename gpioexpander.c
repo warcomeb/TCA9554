@@ -35,7 +35,7 @@ static inline uint8_t __attribute__((always_inline)) getAddress (GPIOExpander_Pi
         return 0;
     }
 
-    switch ((pin & GPIOEXPANDER_PINS_DEVICE_MASK) >> 16)
+    switch ((pin & GPIOEXPANDER_DEVICE_MASK) >> 16)
     {
     case TCA9554_ADDRESS_0x20:
         return 0x20;
@@ -59,6 +59,17 @@ static inline uint8_t __attribute__((always_inline)) getAddress (GPIOExpander_Pi
     }
 }
 
+static inline uint8_t __attribute__((always_inline)) getPin (GPIOExpander_Pins_t pin)
+{
+    if (pin == 0xFFFFFFFF)
+    {
+        ohiassert(0);
+        return 0;
+    }
+
+    return ((uint8_t)(pin & GPIOEXPANDER_PINS_MASK));
+}
+
 GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev)
 {
     GPIOExpander_Device_t device = {0};
@@ -72,13 +83,16 @@ GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t dev, GPIOExp
     if (dev == null)
     {
         ohiassert(0);
+        return GPIOEXPANDER_ERRORS_WRONG_DEVICE;
     }
 
     uint8_t address = getAddress(pin);
-    if (address != 0)
+    uint8_t devPin  = getPin(pin);
+    if ((address != 0) && (devPin != 0))
     {
         // Write register...
-        return GPIOEXPANDER_ERRORS_NO_ERROR;
+        GPIOExpander_Errors_t ret = TCA9554_writeOutput(dev->device,address,value);
+        return ret;
     }
-    return GPIOEXPANDER_ERRORS_WRONG_DEVICE;
+    return GPIOEXPANDER_ERRORS_WRONG_PARAMS;
 }
