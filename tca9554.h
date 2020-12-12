@@ -29,16 +29,26 @@
 
 #include "TCA9554types.h"
 
-GPIOExpander_Errors_t TCA9554_config (Iic_DeviceHandle dev,
+/*!
+ *
+ */
+TCA9554_Errors_t TCA9554_config (Iic_DeviceHandle dev,
+                                 uint8_t address,
+                                 uint8_t value);
+
+/*!
+ *
+ */
+TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
                                       uint8_t address,
-                                      uint8_t value);
+                                      uint8_t value,
+                                      Gpio_Level level);
 
-GPIOExpander_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
-                                           uint8_t address,
-                                           uint8_t value);
-
-GPIOExpander_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
-                                         uint8_t address,
-                                         uint8_t* value);
+/*!
+ *
+ */
+TCA9554_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
+                                    uint8_t address,
+                                    uint8_t* value);
 
 #endif // WARCOMEB_TCA9554_H

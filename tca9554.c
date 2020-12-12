@@ -25,3 +25,99 @@
  */
 
 #include "TCA9554.h"
+
+TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
+                                      uint8_t address,
+                                      uint8_t value,
+                                      Gpio_Level level)
+{
+    if (dev != nullptr)
+    {
+        uint8_t actual = 0;
+        System_Errors err = Iic_readRegister(dev,
+                                             address,
+                                             TCA9554_REGISTER_OUTPUT,
+                                             IIC_REGISTERADDRESSSIZE_8BIT,
+                                             &actual,
+                                             1,
+                                             100);
+
+        if (level == GPIO_HIGH)
+        {
+            actual |= value;
+        }
+        else
+        {
+            actual &= (~value);
+        }
+
+        err = Iic_writeRegister(dev,
+                                address,
+                                TCA9554_REGISTER_OUTPUT,
+                                IIC_REGISTERADDRESSSIZE_8BIT,
+                                &actual,
+                                1,
+                                100);
+        if (err == ERRORS_NO_ERROR)
+        {
+            return TCA9554_ERRORS_NO_ERROR;
+        }
+        return TCA9554_ERRORS_COMMUNICATION_FAIL;
+    }
+    else
+    {
+        return TCA9554_ERRORS_NO_DEVICE;
+    }
+}
+
+TCA9554_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
+                                    uint8_t address,
+                                    uint8_t* value)
+{
+    if (dev != nullptr)
+    {
+        uint8_t myvalue = value;
+        System_Errors err = Iic_readRegister(dev,
+                                             address,
+                                             TCA9554_REGISTER_INPUT,
+                                             IIC_REGISTERADDRESSSIZE_8BIT,
+                                             value,
+                                             1,
+                                             100);
+        if (err == ERRORS_NO_ERROR)
+        {
+            return TCA9554_ERRORS_NO_ERROR;
+        }
+        return TCA9554_ERRORS_COMMUNICATION_FAIL;
+    }
+    else
+    {
+        return TCA9554_ERRORS_NO_DEVICE;
+    }
+}
+
+TCA9554_Errors_t TCA9554_config (Iic_DeviceHandle dev,
+                                 uint8_t address,
+                                 uint8_t value)
+{
+    if (dev != nullptr)
+    {
+        uint8_t myvalue = value;
+        System_Errors err = Iic_writeRegister(dev,
+                                              address,
+                                              TCA9554_REGISTER_CONFIG,
+                                              IIC_REGISTERADDRESSSIZE_8BIT,
+                                              &myvalue,
+                                              1,
+                                              100);
+        if (err == ERRORS_NO_ERROR)
+        {
+            return TCA9554_ERRORS_NO_ERROR;
+        }
+        return TCA9554_ERRORS_COMMUNICATION_FAIL;
+    }
+    else
+    {
+        return TCA9554_ERRORS_NO_DEVICE;
+    }
+}

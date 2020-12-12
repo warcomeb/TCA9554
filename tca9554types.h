@@ -36,10 +36,20 @@ extern "C" {
 #include "firmware.h"
 #endif
 
-#define TCA9554_REG_INPUT                        0x00
-#define TCA9554_REG_OUTPUT                       0x01
-#define TCA9554_REG_POLARITY                     0x02
-#define TCA9554_REG_CONFIG                       0x03
+#define TCA9554_REGISTER_INPUT                   0x00
+#define TCA9554_REGISTER_OUTPUT                  0x01
+#define TCA9554_REGISTER_POLARITY                0x02
+#define TCA9554_REGISTER_CONFIG                  0x03
+
+/*!
+ * List of possible errors.
+ */
+typedef enum _TCA9554_Errors_t
+{
+    TCA9554_ERRORS_NO_ERROR = 0,
+    TCA9554_ERRORS_NO_DEVICE,
+    TCA9554_ERRORS_COMMUNICATION_FAIL,
+} TCA9554_Errors_t;
 
 typedef struct _bitwise_t
 {
