@@ -80,13 +80,31 @@ GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev)
     return device;
 }
 
-GPIOExpander_Errors_t GPIOExpander_config (GPIOExpander_DeviceHandle_t, GPIOExpander_Pins_t pin, GPIOExpander_Type_t type)
+GPIOExpander_Errors_t GPIOExpander_config (GPIOExpander_DeviceHandle_t dev,
+                                           GPIOExpander_Pins_t pin,
+                                           GPIOExpander_Type_t type)
 {
     if (dev == null)
     {
         ohiassert(0);
         return GPIOEXPANDER_ERRORS_WRONG_DEVICE;
     }
+
+    uint8_t address = getAddress(pin);
+    uint8_t pinNumber  = getPin(pin);
+    if ((address != 0) && (pinNumber < TCA9554_PINS_NUMBER))
+    {
+        // Write register...
+        uint8_t mypin = GPIOEXPANDER_PIN(pinNumber);
+        TCA9554_Errors_t ret = TCA9554_config(dev->device,address,mypin,(uint8_t)type);
+
+        if (ret != TCA9554_ERRORS_NO_ERROR)
+        {
+            return GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL;
+        }
+        return GPIOEXPANDER_ERRORS_NO_ERROR;
+    }
+    return GPIOEXPANDER_ERRORS_WRONG_PARAMS;
 }
 
 GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin)
@@ -98,11 +116,11 @@ GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t dev, GPIOExp
     }
 
     uint8_t address = getAddress(pin);
-    uint8_t devPin  = getPin(pin);
-    if ((address != 0) && (devPin != 0) && (devPin < 8))
+    uint8_t pinNumber  = getPin(pin);
+    if ((address != 0) && (pinNumber < TCA9554_PINS_NUMBER))
     {
         // Write register...
-        uint8_t mypin = GPIOEXPANDER_PIN(devPin);
+        uint8_t mypin = GPIOEXPANDER_PIN(pinNumber);
         TCA9554_Errors_t ret = TCA9554_writeOutput(dev->device,address,mypin,GPIO_HIGH);
 
         if (ret != TCA9554_ERRORS_NO_ERROR)
@@ -123,11 +141,11 @@ GPIOExpander_Errors_t GPIOExpander_clear (GPIOExpander_DeviceHandle_t dev, GPIOE
     }
 
     uint8_t address = getAddress(pin);
-    uint8_t devPin  = getPin(pin);
-    if ((address != 0) && (devPin != 0) && (devPin < 8))
+    uint8_t pinNumber  = getPin(pin);
+    if ((address != 0) && (pinNumber < TCA9554_PINS_NUMBER))
     {
         // Write register...
-        uint8_t mypin = GPIOEXPANDER_PIN(devPin);
+        uint8_t mypin = GPIOEXPANDER_PIN(pinNumber);
         TCA9554_Errors_t ret = TCA9554_writeOutput(dev->device,address,mypin,GPIO_LOW);
 
         if (ret != TCA9554_ERRORS_NO_ERROR)
@@ -141,6 +159,7 @@ GPIOExpander_Errors_t GPIOExpander_clear (GPIOExpander_DeviceHandle_t dev, GPIOE
 
 GPIOExpander_Errors_t GPIOExpander_toggle (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin)
 {
+    // TODO!
     return GPIOEXPANDER_ERRORS_NO_ERROR;
 }
 
@@ -153,26 +172,19 @@ GPIOExpander_Errors_t GPIOExpander_get (GPIOExpander_DeviceHandle_t dev, GPIOExp
     }
 
     uint8_t address = getAddress(pin);
-    uint8_t devPin  = getPin(pin);
-    if ((address != 0) && (devPin != 0) && (devPin < 8))
+    uint8_t pinNumber  = getPin(pin);
+    if ((address != 0) && (pinNumber < TCA9554_PINS_NUMBER))
     {
         // Write register...
-        uint8_t mypin = GPIOEXPANDER_PIN(devPin);
-        uint8_t readValue = 0;
-        TCA9554_Errors_t ret = TCA9554_readInput(dev->device,address,&readValue);
+        uint8_t mypin = GPIOEXPANDER_PIN(pinNumber);
+        Gpio_Level readValue = 0;
+        TCA9554_Errors_t ret = TCA9554_readInput(dev->device,address,mypin,&readValue);
         if (ret != TCA9554_ERRORS_NO_ERROR)
         {
             return GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL;
         }
 
-        if ((readValue & mypin) > 0)
-        {
-            *level = GPIO_HIGH;
-        }
-        else
-        {
-            *level = GPIO_LOW;
-        }
+        *level = readValue;
 
         return GPIOEXPANDER_ERRORS_NO_ERROR;
     }

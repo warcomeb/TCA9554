@@ -34,6 +34,7 @@
  */
 TCA9554_Errors_t TCA9554_config (Iic_DeviceHandle dev,
                                  uint8_t address,
+                                 TCA9554_Pins_t pin,
                                  uint8_t value);
 
 /*!
@@ -41,7 +42,7 @@ TCA9554_Errors_t TCA9554_config (Iic_DeviceHandle dev,
  */
 TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
                                       uint8_t address,
-                                      uint8_t value,
+                                      TCA9554_Pins_t value,
                                       Gpio_Level level);
 
 /*!
@@ -49,6 +50,7 @@ TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
  */
 TCA9554_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
                                     uint8_t address,
-                                    uint8_t* value);
+                                    TCA9554_Pins_t pin,
+                                    Gpio_Level* value);
 
 #endif // WARCOMEB_TCA9554_H

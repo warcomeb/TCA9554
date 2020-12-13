@@ -26,13 +26,27 @@
 
 #include "TCA9554.h"
 
+#define TCA9554_VALID_PIN(PIN) (((PIN) == TCA9554_PINS_0)  || \
+                                ((PIN) == TCA9554_PINS_1)  || \
+                                ((PIN) == TCA9554_PINS_2)  || \
+                                ((PIN) == TCA9554_PINS_3)  || \
+                                ((PIN) == TCA9554_PINS_4)  || \
+                                ((PIN) == TCA9554_PINS_5)  || \
+                                ((PIN) == TCA9554_PINS_6)  || \
+                                ((PIN) == TCA9554_PINS_7))
+
 TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
                                       uint8_t address,
-                                      uint8_t value,
+                                      TCA9554_Pins_t pin,
                                       Gpio_Level level)
 {
     if (dev != nullptr)
     {
+        if (!TCA9554_VALID_PIN(pin))
+        {
+            return TCA9554_ERRORS_WRONG_PIN;
+        }
+
         uint8_t actual = 0;
         System_Errors err = Iic_readRegister(dev,
                                              address,
@@ -44,11 +58,11 @@ TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
 
         if (level == GPIO_HIGH)
         {
-            actual |= value;
+            actual |= pin;
         }
         else
         {
-            actual &= (~value);
+            actual &= (~pin);
         }
 
         err = Iic_writeRegister(dev,
@@ -72,18 +86,34 @@ TCA9554_Errors_t TCA9554_writeOutput (Iic_DeviceHandle dev,
 
 TCA9554_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
                                     uint8_t address,
-                                    uint8_t* value)
+                                    TCA9554_Pins_t pin,
+                                    Gpio_Level* value)
 {
     if (dev != nullptr)
     {
-        uint8_t myvalue = value;
+        if (!TCA9554_VALID_PIN(pin))
+        {
+            return TCA9554_ERRORS_WRONG_PIN;
+        }
+
+        uint8_t actual = 0;
         System_Errors err = Iic_readRegister(dev,
                                              address,
                                              TCA9554_REGISTER_INPUT,
                                              IIC_REGISTERADDRESSSIZE_8BIT,
-                                             value,
+                                             &actual,
                                              1,
                                              100);
+
+        if ((actual & pin) == pin)
+        {
+            *value = GPIO_HIGH;
+        }
+        else
+        {
+            *value = GPIO_LOW;
+        }
+
         if (err == ERRORS_NO_ERROR)
         {
             return TCA9554_ERRORS_NO_ERROR;
@@ -98,18 +128,41 @@ TCA9554_Errors_t TCA9554_readInput (Iic_DeviceHandle dev,
 
 TCA9554_Errors_t TCA9554_config (Iic_DeviceHandle dev,
                                  uint8_t address,
+                                 TCA9554_Pins_t pin,
                                  uint8_t value)
 {
     if (dev != nullptr)
     {
-        uint8_t myvalue = value;
-        System_Errors err = Iic_writeRegister(dev,
-                                              address,
-                                              TCA9554_REGISTER_CONFIG,
-                                              IIC_REGISTERADDRESSSIZE_8BIT,
-                                              &myvalue,
-                                              1,
-                                              100);
+        if (!TCA9554_VALID_PIN(pin))
+        {
+            return TCA9554_ERRORS_WRONG_PIN;
+        }
+
+        uint8_t actual = 0;
+        System_Errors err = Iic_readRegister(dev,
+                                             address,
+                                             TCA9554_REGISTER_CONFIG,
+                                             IIC_REGISTERADDRESSSIZE_8BIT,
+                                             &actual,
+                                             1,
+                                             100);
+
+        if (value > 0) // input
+        {
+            actual |= pin;
+        }
+        else // output
+        {
+            actual &= (~pin);
+        }
+
+        err = Iic_writeRegister(dev,
+                                address,
+                                TCA9554_REGISTER_CONFIG,
+                                IIC_REGISTERADDRESSSIZE_8BIT,
+                                &actual,
+                                1,
+                                100);
         if (err == ERRORS_NO_ERROR)
         {
             return TCA9554_ERRORS_NO_ERROR;

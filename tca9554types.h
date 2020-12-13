@@ -41,6 +41,8 @@ extern "C" {
 #define TCA9554_REGISTER_POLARITY                0x02
 #define TCA9554_REGISTER_CONFIG                  0x03
 
+#define TCA9554_PINS_NUMBER                      8u
+
 /*!
  * List of possible errors.
  */
@@ -48,8 +50,22 @@ typedef enum _TCA9554_Errors_t
 {
     TCA9554_ERRORS_NO_ERROR = 0,
     TCA9554_ERRORS_NO_DEVICE,
+    TCA9554_ERRORS_WRONG_PIN,
     TCA9554_ERRORS_COMMUNICATION_FAIL,
 } TCA9554_Errors_t;
+
+typedef enum _TCA9554_Pins_t
+{
+    TCA9554_PINS_0 = 0x01,
+    TCA9554_PINS_1 = 0x02,
+    TCA9554_PINS_2 = 0x04,
+    TCA9554_PINS_3 = 0x08,
+    TCA9554_PINS_4 = 0x10,
+    TCA9554_PINS_5 = 0x20,
+    TCA9554_PINS_6 = 0x40,
+    TCA9554_PINS_7 = 0x80,
+} TCA9554_Pins_t;
+
 
 typedef struct _bitwise_t
 {
