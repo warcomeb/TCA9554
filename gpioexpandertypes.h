@@ -36,6 +36,15 @@ extern "C" {
 #include "firmware.h"
 #endif
 
+/*!
+ * \defgroup GPIOExpander_Type
+ * \ingroup TCA9554
+ * \{
+ */
+
+/*!
+ *
+ */
 typedef void* GPIOExpander_LowLevelDriver_t;
 
 /*!
@@ -50,7 +59,9 @@ typedef enum _GPIOExpander_Errors_t
     GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL,
 } GPIOExpander_Errors_t;
 
-
+/*!
+ * List of all possible pins based on eight address of this device.
+ */
 typedef enum _GPIOExpander_Pins_t
 {
     // Address 0x20
@@ -149,6 +160,10 @@ typedef struct _GPIOExpander_Device_t
     Iic_DeviceHandle device;
 
 } GPIOExpander_Device_t, *GPIOExpander_DeviceHandle_t;
+
+/*!
+ * \}
+ */
 
 #ifdef __cplusplus
 }

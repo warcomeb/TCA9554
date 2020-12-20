@@ -36,6 +36,12 @@ extern "C" {
 #include "firmware.h"
 #endif
 
+/*!
+ * \defgroup TCA9554_Type
+ * \ingroup TCA9554
+ * \{
+ */
+
 // Library Version ------------------------------------------------------------
 
 #define WARCOMEB_TCA9554_LIBRARY_VERSION_MAJOR             1
@@ -71,6 +77,9 @@ typedef enum _TCA9554_Errors_t
     TCA9554_ERRORS_COMMUNICATION_FAIL,
 } TCA9554_Errors_t;
 
+/*!
+ *
+ */
 typedef enum _TCA9554_Pins_t
 {
     TCA9554_PINS_0 = 0x01,
@@ -83,7 +92,9 @@ typedef enum _TCA9554_Pins_t
     TCA9554_PINS_7 = 0x80,
 } TCA9554_Pins_t;
 
-
+/*!
+ *
+ */
 typedef struct _bitwise_t
 {
 
@@ -112,29 +123,45 @@ typedef enum _TCA9554_Address_t
     TCA9554_ADDRESS_0x27 = 0x80,
 } TCA9554_Address_t;
 
+/*!
+ *
+ */
 typedef union _TCA9554_InputRegister_t
 {
     uint8_t    all;
     bitwise_t  bit;
 } TCA9554_InputReg_t;
 
+/*!
+ *
+ */
 typedef union _TCA9554_OutputRegister_t
 {
     uint8_t    all;
     bitwise_t  bit;
 } TCA9554_OutputReg_t;
 
+/*!
+ *
+ */
 typedef union _TCA9554_PolarityRegister_t
 {
     uint8_t    all;
     bitwise_t  bit;
 } TCA9554_PolarityReg_t;
 
+/*!
+ *
+ */
 typedef union _TCA9554_ConfigRegister_t
 {
     uint8_t    all;
     bitwise_t  bit;
 } TCA9554_ConfigRegister_t;
+
+/*!
+ * \}
+ */
 
 #ifdef __cplusplus
 }
