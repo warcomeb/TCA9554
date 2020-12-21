@@ -40,7 +40,10 @@ extern "C" {
  */
 
 /*!
+ * The function initialize the GPIO expander library.
  *
+ * \param[in] dev: The low level peripheral, in this case a I2C handle.
+ * \return An handle to manage the GPIO expander.
  */
 GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev);
 
@@ -50,22 +53,55 @@ GPIOExpander_Device_t GPIOExpander_init (GPIOExpander_LowLevelDriver_t dev);
 GPIOExpander_Errors_t GPIOExpander_config (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin, GPIOExpander_Type_t type);
 
 /*!
+ * The function set a high-level in output of the selected pin.
  *
+ * \param[in] dev: The handle to manage the device.
+ * \param[in] pin: The selected pin.
+ * \return The function can return:
+ *     \retval GPIOEXPANDER_ERRORS_NO_ERROR in case of no-error,
+ *     \retval GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL in case the bus-communication doesn't work,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_PARAMS in case some params are not correct,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_DEVICE in case of the device handle is not valid.
  */
 GPIOExpander_Errors_t GPIOExpander_set (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin);
 
 /*!
+ * The function set a low-level in output of the selected pin.
  *
+ * \param[in] dev: The handle to manage the device.
+ * \param[in] pin: The selected pin.
+ * \return The function can return:
+ *     \retval GPIOEXPANDER_ERRORS_NO_ERROR in case of no-error,
+ *     \retval GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL in case the bus-communication doesn't work,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_PARAMS in case some params are not correct,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_DEVICE in case of the device handle is not valid.
  */
 GPIOExpander_Errors_t GPIOExpander_clear (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin);
 
 /*!
+ * The function toggle the level in output of the selected pin.
  *
+ * \param[in] dev: The handle to manage the device.
+ * \param[in] pin: The selected pin.
+ * \return The function can return:
+ *     \retval GPIOEXPANDER_ERRORS_NO_ERROR in case of no-error,
+ *     \retval GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL in case the bus-communication doesn't work,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_PARAMS in case some params are not correct,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_DEVICE in case of the device handle is not valid.
  */
 GPIOExpander_Errors_t GPIOExpander_toggle (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin);
 
 /*!
+ * The function read the level in input of the selected pin.
  *
+ * \param[in]    dev: The handle to manage the device.
+ * \param[in]    pin: The selected pin.
+ * \param[out] level: The value read from the selected pin.
+ * \return The function can return:
+ *     \retval GPIOEXPANDER_ERRORS_NO_ERROR in case of no-error,
+ *     \retval GPIOEXPANDER_ERRORS_COMMUNICATION_FAIL in case the bus-communication doesn't work,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_PARAMS in case some params are not correct,
+ *     \retval GPIOEXPANDER_ERRORS_WRONG_DEVICE in case of the device handle is not valid.
  */
 GPIOExpander_Errors_t GPIOExpander_get (GPIOExpander_DeviceHandle_t dev, GPIOExpander_Pins_t pin, Gpio_Level* level);
 

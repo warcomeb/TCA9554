@@ -78,7 +78,7 @@ typedef enum _TCA9554_Errors_t
 } TCA9554_Errors_t;
 
 /*!
- *
+ * List of the pins of the device.
  */
 typedef enum _TCA9554_Pins_t
 {
@@ -91,6 +91,24 @@ typedef enum _TCA9554_Pins_t
     TCA9554_PINS_6 = 0x40,
     TCA9554_PINS_7 = 0x80,
 } TCA9554_Pins_t;
+
+/*!
+ * List of all possible device address.
+ */
+typedef enum _TCA9554_Address_t
+{
+    TCA9554_ADDRESS_0x20 = 0x01,
+    TCA9554_ADDRESS_0x21 = 0x02,
+    TCA9554_ADDRESS_0x22 = 0x04,
+    TCA9554_ADDRESS_0x23 = 0x08,
+    TCA9554_ADDRESS_0x24 = 0x10,
+    TCA9554_ADDRESS_0x25 = 0x20,
+    TCA9554_ADDRESS_0x26 = 0x40,
+    TCA9554_ADDRESS_0x27 = 0x80,
+} TCA9554_Address_t;
+
+#if 0
+// WARNING: This part is unused!
 
 /*!
  *
@@ -107,21 +125,6 @@ typedef struct _bitwise_t
   uint8_t P6       : 1;
   uint8_t P7       : 1;
 } bitwise_t;
-
-/*!
- * List of all possible device address.
- */
-typedef enum _TCA9554_Address_t
-{
-    TCA9554_ADDRESS_0x20 = 0x01,
-    TCA9554_ADDRESS_0x21 = 0x02,
-    TCA9554_ADDRESS_0x22 = 0x04,
-    TCA9554_ADDRESS_0x23 = 0x08,
-    TCA9554_ADDRESS_0x24 = 0x10,
-    TCA9554_ADDRESS_0x25 = 0x20,
-    TCA9554_ADDRESS_0x26 = 0x40,
-    TCA9554_ADDRESS_0x27 = 0x80,
-} TCA9554_Address_t;
 
 /*!
  *
@@ -158,7 +161,7 @@ typedef union _TCA9554_ConfigRegister_t
     uint8_t    all;
     bitwise_t  bit;
 } TCA9554_ConfigRegister_t;
-
+#endif
 /*!
  * \}
  */
